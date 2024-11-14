@@ -1,0 +1,45 @@
+import random
+
+# Define board with snakes and ladders
+# Key represents starting point, value represents ending point
+snakes = {16: 6, 47: 26, 49: 11, 56: 53, 62: 19, 64: 60, 87: 24, 93: 73, 95: 75, 98: 78}
+ladders = {1: 38, 4: 14, 9: 31, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 80: 100}
+
+# Initialize players' positions
+player_positions = {1: 0, 2: 0}
+
+# Function to roll the dice
+def roll_dice():
+    return random.randint(1, 6)
+
+# Function to move player based on dice roll and handle snakes or ladders
+def move_player(player, roll):
+    pos = player_positions[player] + roll
+    if pos > 100:
+        return  # Player cannot move beyond 100
+    player_positions[player] = snakes.get(pos, ladders.get(pos, pos))
+
+# Function to check if a player has won
+def has_won(player):
+    return player_positions[player] == 100
+
+# Main game function
+def play_game():
+    print("Welcome to Snake and Ladders!")
+    player_turn = 1
+    while True:
+        input(f"Player {player_turn}'s turn. Press Enter to roll the dice...")
+        roll = roll_dice()
+        print(f"Player {player_turn} rolled a {roll}")
+        move_player(player_turn, roll)
+        print(f"Player {player_turn} is now on position {player_positions[player_turn]}")
+
+        if has_won(player_turn):
+            print(f"Player {player_turn} wins!")
+            break
+
+        # Switch to the other player
+        player_turn = 2 if player_turn == 1 else 1
+
+# Start the game
+play_game()
